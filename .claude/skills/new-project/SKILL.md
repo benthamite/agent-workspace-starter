@@ -52,10 +52,15 @@ If this workspace also mirrors maps to `AGENTS.md` for other agent CLIs,
 create it as a byte-identical copy and verify with
 `diff projects/<slug>/CLAUDE.md projects/<slug>/AGENTS.md`.
 
-## Commit and hand off
+## Validate, commit, and hand off
 
-Commit the new directory with message `Add <slug> project`. Do not push unless
-the user asked to.
+Run `python3 scripts/check-conventions.py` from the workspace root and fix any
+failure — in particular, Current focus bullets must carry the TODOs' own
+wording verbatim. Then commit the new directory with message
+`Add <slug> project`, using an explicit pathspec
+(`git commit -m "Add <slug> project" -- projects/<slug>`) so pre-staged
+unrelated changes are not swept in; confirm with `git show --stat HEAD`. Do
+not push unless the user asked to.
 
 Then report the project path and the exact next task, and suggest continuing
 in a session started inside `projects/<slug>/` so the project's map loads

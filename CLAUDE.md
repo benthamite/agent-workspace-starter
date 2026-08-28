@@ -1,12 +1,12 @@
-# <Your workspace name>
+# [Your workspace name]
 
 ## Scope
 
-<Who you are, your role, and what this workspace is for. Example: "Jane is a
+[Who you are, your role, and what this workspace is for. Example: "Jane is a
 product manager at Acme. This repository holds working notes for all her
 projects, meetings, research, and drafts. Claude Code acts as a thinking
 partner and project manager: track context, advise on strategy, draft
-deliverables, and manage next steps.">
+deliverables, and manage next steps."]
 
 ## Repository map
 
@@ -15,15 +15,16 @@ deliverables, and manage next steps.">
 - Meeting notes live under `meetings/<person>/`, one dated file per meeting.
 - Project *code* lives outside this repository; each brief records its
   checkout path.
-- Shared conventions: `projects/context/project-doc-conventions.md`.
+- Shared conventions: `projects/context/project-doc-conventions.md`. Their
+  mechanical subset is checked by `scripts/check-conventions.py`.
 
 ## Conventions
 
 - Write in first person ("I built", not "we built"). Use first names for
   colleagues.
-- <Your writing, formatting, and tooling conventions.>
+- [Your writing, formatting, and tooling conventions.]
 
 ## Latest session
 
-<Maintained by /update-log for sessions run at the workspace root: a 2–4
-sentence summary and a pointer to logs/YYYY-MM-DD.md.>
+[Maintained by /update-log for sessions run at the workspace root: a 2–4
+sentence summary and a pointer to logs/YYYY-MM-DD.md.]

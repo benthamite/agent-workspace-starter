@@ -22,13 +22,14 @@ pricing, and docs landing page; blog stays on the old stack for now.
 
 - [ ] Build the testimonial carousel component to close the homepage gap
 - [ ] Draft the new pricing page copy and send it to Alex for review
+      (from [meetings/alex/2026-01-15.md](../../meetings/alex/2026-01-15.md), item 2)
 - [ ] Audit docs landing page for broken deep links before the cutover
-      (from [meetings/alex/2026-01-15.md](../../meetings/alex/2026-01-15.md))
+      (from [meetings/alex/2026-01-15.md](../../meetings/alex/2026-01-15.md), item 1)
 - [ ] Get launch-week freeze dates from marketing (asked 2026-01-15, no reply
       as of 2026-01-15)
 
 ## References
 
 - Code: `~/repos/marketing-site`, branch `redesign`
-- Design system: <link to Figma / tokens>
-- Staging: <staging URL>
+- Design system: [link to your Figma / design tokens]
+- Staging: [your staging URL]

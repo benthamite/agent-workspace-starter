@@ -40,8 +40,9 @@ Rules:
   TODO itself, with the date it was last checked ("asked Alex 2026-01-10, no
   reply as of 2026-01-15"). Bare "waiting on Alex" reads as current however
   old it gets.
-- An action item that came from a meeting carries a back-link to the meeting
-  file: `(from [meetings/alex/2026-01-15.md](../../meetings/alex/2026-01-15.md))`.
+- An action item that came from a meeting carries a back-link naming the
+  meeting file and the item's stable number in that file's "Mine" list:
+  `(from [meetings/alex/2026-01-15.md](../../meetings/alex/2026-01-15.md), item 1)`.
 - When completed work and historical narrative make the brief long, move them
   to `<slug>-archive.md` in the same directory. The brief stays short enough
   to read in one sitting.
@@ -92,3 +93,13 @@ One file per day, append-only, written only by `/update-log`. It answers "what
 happened and why": work done, findings, results, reasoning behind non-obvious
 choices, and open questions. Future sessions read it on demand via the map's
 pointer; it never loads automatically, so it can be as detailed as needed.
+
+## Enforcement
+
+`scripts/check-conventions.py` checks the mechanical subset of these rules:
+every project has a brief and a map, Current focus bullets appear verbatim in
+Active TODOs (no paraphrase), Current focus has no dates and respects the word
+cap, Current state has no "On YYYY-MM-DD" narrative, and meeting back-links
+resolve. The skills run it before committing; you can run it any time from the
+workspace root. It exists because these are exactly the rules an agent drifts
+from first.

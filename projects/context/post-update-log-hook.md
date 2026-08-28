@@ -1,9 +1,14 @@
 # Post-`/update-log` hook (all projects)
 
 Read and follow these instructions after `/update-log` writes a session log in
-any project under `projects/`. The target shape of every file mentioned here
-is defined in [project-doc-conventions.md](project-doc-conventions.md); this
-file says *when* to update, that one says *what the result looks like*.
+any project under `projects/` (for a workspace-root session, apply them to
+each project the session touched). The target shape of every file mentioned
+here is defined in [project-doc-conventions.md](project-doc-conventions.md);
+this file says *when* to update, that one says *what the result looks like*.
+
+This file is also the **single owner of brief-to-map derivation**: other
+skills that change a brief (e.g. `meeting-debrief`) apply step 3 below rather
+than restating its rules.
 
 1. **Refresh the brief.** Update `projects/<slug>/<slug>.md` from the session
    log just written:
@@ -16,9 +21,10 @@ file says *when* to update, that one says *what the result looks like*.
 
 2. **Reconcile meeting action items.** For each TODO in the brief that carries
    a meeting back-link and was completed this session, open the linked
-   `meetings/<person>/YYYY-MM-DD.md` file and mark the corresponding action
-   item done. This keeps the meeting record and the project brief agreeing
-   about what is outstanding.
+   `meetings/<person>/YYYY-MM-DD.md` file and mark the action item done.
+   Identify it by the `item N` number in the back-link, not by wording —
+   wording may have been edited since the debrief. This keeps the meeting
+   record and the project brief agreeing about what is outstanding.
 
 3. **Regenerate the map's Current focus** from the refreshed brief's Active
    TODOs, per the rules in project-doc-conventions.md. The order matters:

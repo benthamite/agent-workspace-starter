@@ -2,7 +2,8 @@
 
 A template for running Claude Code as a project manager and thinking partner
 across many parallel projects, with durable memory between sessions. The whole
-system is a directory layout, three writing conventions, and three skills.
+system is a directory layout, three writing conventions, three skills, and one
+small validator script.
 There is no database, no plugin, and no server: just Markdown files in a
 private git repository.
 
@@ -86,8 +87,10 @@ Two rules keep the layers from bleeding into each other (spelled out in
    session gets no log), then writes the log, refreshes the brief, regenerates
    the map's current focus, and commits.
 
-Sessions started at the workspace root work the same way; root-level logs go
-to a top-level `logs/` directory.
+Sessions started at the workspace root log to a top-level `logs/` directory,
+and `/update-log` applies the same hook-driven brief and map refresh to every
+project the session touched, so root sessions leave project state as current
+as project sessions do.
 
 ## Meetings
 
@@ -109,14 +112,24 @@ meeting file gets marked too.
 
 ## Getting started
 
-1. Copy this tree (or use it as a template repository) and make it a **private**
-   git repository. Session logs accumulate unfiltered working notes; treat the
-   whole workspace as confidential.
-2. Rewrite the root `CLAUDE.md`; it is a template with placeholders for your
+1. Create your own **private** copy — session logs accumulate unfiltered
+   working notes, so treat the whole workspace as confidential:
+
+   ```bash
+   gh repo create my-workspace --template benthamite/agent-workspace-starter --private --clone
+   cd my-workspace
+   ```
+
+   (Or click "Use this template" on GitHub, or clone and re-init:
+   `git clone <this repo> my-workspace && cd my-workspace && rm -rf .git && git init && git add -A && git commit -m "Init workspace"`.)
+2. Smoke test: `python3 scripts/check-conventions.py` from the root should
+   print `Convention check passed.` (needs Python 3.8+; the kit was exercised
+   with Claude Code 2.1.247).
+3. Rewrite the root `CLAUDE.md`; it is a template with placeholders for your
    name, role, and conventions.
-3. Look at the example project (`projects/website-redesign/`) and example
+4. Look at the example project (`projects/website-redesign/`) and example
    meeting (`meetings/alex/`) to see the target shape, then delete them.
-4. Start your first real project: open Claude Code at the workspace root and
+5. Start your first real project: open Claude Code at the workspace root and
    say `/new-project <description>`.
 
 ## Adapting
@@ -131,7 +144,11 @@ meeting file gets marked too.
 - **Other agents.** If you also use Codex or another CLI that reads
   `AGENTS.md`, keep it as a byte-identical mirror of each `CLAUDE.md` and sync
   it whenever the map changes.
-- **Hardening.** The original system grew receipts, an isolated commit harness,
-  generated project registries, and validation of every convention above, each
-  added after a real failure at real complexity cost. Start without any of it. Add a check only after the mistake it prevents has actually bitten
-  you.
+- **Hardening.** This kit ships exactly one check, `scripts/check-conventions.py`,
+  because testing showed it is needed: agents drift from the digest rules
+  (paraphrasing TODOs, slipping narrative into state sections) even with the
+  conventions in context, so the skills run it before every commit. The
+  original system goes much further (receipts, an isolated commit harness,
+  generated project registries), each piece added after a real failure at real
+  complexity cost. Start with just the one check, and add more only after the
+  mistake it prevents has actually bitten you.

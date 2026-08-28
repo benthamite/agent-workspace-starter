@@ -1,0 +1,6 @@
+{
+  "local": {
+    "skills": "claude-only",
+    "instructions": "claude-only"
+  }
+}

@@ -30,12 +30,17 @@ lookup), write nothing, commit nothing, report `No durable changes — skipping
 update-log.`, and stop. Doing nothing is a valid, friction-free outcome.
 Exception: if the user asked for specific bookkeeping, honor it.
 
-## Step 0: Find the project root
+## Step 0: Find the bookkeeping root and the affected projects
 
-The project root is the nearest ancestor of the working directory that sits
-directly under `projects/` (e.g. `projects/<slug>/`), or the workspace root
-itself for sessions started there. The log directory is `<project-root>/logs/`;
-create it if missing.
+The bookkeeping root is the nearest ancestor of the working directory that
+sits directly under `projects/` (e.g. `projects/<slug>/`), or the workspace
+root itself for sessions started there. The log directory is
+`<bookkeeping-root>/logs/`; create it if missing.
+
+Separately, list the **affected projects**: every `projects/<slug>/` whose
+files this session changed (check `git status` plus your session memory).
+For a project session this is normally just the project itself; a root
+session may have touched several.
 
 ## Step 1: Write the session log
 
@@ -54,35 +59,43 @@ Contents:
 Be concise but specific. Future sessions may need to understand *why* choices
 were made, so record the reasoning behind non-obvious decisions.
 
-## Step 2: Run post-update-log hooks
+## Step 2: Run post-update-log hooks for every affected project
 
-Walk up ancestor directories from the project root to the workspace root
+Walk up ancestor directories from the bookkeeping root to the workspace root
 (inclusive). For each ancestor, if `<ancestor>/context/post-update-log-hook.md`
-exists, read and follow it. Run all matching hooks, innermost first. In this
-workspace, `projects/context/post-update-log-hook.md` refreshes the project
-brief from the log and reconciles meeting action items.
+exists, read and follow it, innermost first. In this workspace,
+`projects/context/post-update-log-hook.md` refreshes the project brief from
+the log, reconciles meeting action items, and regenerates the project map's
+`## Current focus` — it is the single owner of that derivation; do not
+re-derive the map outside it.
 
-## Step 3: Update the map's Current focus
+For a session at the workspace root, apply that hook to **each affected
+project** from Step 0, so a root session that touched projects still leaves
+their briefs, maps, and meeting items current.
 
-After the hooks have refreshed the brief, regenerate the `## Current focus`
-section of the project's `CLAUDE.md` from the brief's Active TODOs, following
-the rules in `projects/context/project-doc-conventions.md`: replace the
-previous content entirely (never append), one orientation line plus up to ~6
-bullets, ~120-word cap, no dates or session narrative, carry each TODO's own
-wording, and never state anything here that the brief does not already say.
+## Step 3: Update the root map (root sessions only)
 
 For a session at the workspace root, update the root `CLAUDE.md`'s
-`## Latest session` section instead: a 2–4 sentence summary plus a pointer
-line `Full details: logs/YYYY-MM-DD.md`. Do not paste the log itself.
+`## Latest session` section: a 2–4 sentence summary plus a pointer line
+`Full details: logs/YYYY-MM-DD.md`. Do not paste the log itself. For a
+project session, the hook in Step 2 already updated the project map; there
+is nothing to do here.
 
-## Step 4: Commit
+## Step 4: Validate, then commit
 
-Commit the new log file, the refreshed brief, the updated map, and any files
-changed by hooks, with a descriptive message. Stage only these files: if
-unrelated changes are dirty in the working tree, leave them out (use
-hunk-level staging if a file mixes both). Inspect `git diff --cached` before
-committing to confirm only bookkeeping changes are staged. Do not push unless
-the user asked to.
+Run `python3 scripts/check-conventions.py` from the workspace root and fix
+any failure before committing — it catches the drift (paraphrased digest
+bullets, narrative in state sections, broken meeting links) that these
+conventions exist to prevent.
+
+Then commit the new log file, the refreshed briefs, the updated maps, and any
+other files changed by hooks, with a descriptive message. Stage only these
+files: if unrelated changes are dirty or already staged, leave them out (use
+hunk-level staging if a file mixes both, and commit with an explicit pathspec
+— `git commit -m "<message>" -- <files>` — so pre-staged unrelated changes
+are not swept in). Inspect the result with `git show --stat HEAD` to confirm
+only bookkeeping changes were committed. Do not push unless the user asked
+to.
 
 ## Report
 
